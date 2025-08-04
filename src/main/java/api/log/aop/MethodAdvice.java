@@ -1,18 +1,14 @@
 package api.log.aop;
 
-import api.log.formater.DefaultParamFormatter;
+import api.log.base.OutContent;
+import api.log.execp.ALogException;
 import api.log.formater.ParamFormatter;
+import api.log.base.ContextUtil;
 import api.log.outer.Outer;
-import api.log.utils.ContextUtil;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author: chenenwei
@@ -29,17 +25,38 @@ public class MethodAdvice implements MethodInterceptor {
 
         ParamFormatter formatter = ContextUtil.getBean(ParamFormatter.class);
 
-        if (printParam) {
-            logger.debug("Before method execute...");
-            // 参数格式化
-            Object format = formatter.format(invocation.getMethod().getParameters(), invocation.getArguments());
-            // 参数输出，默认使用spring
-            Outer outer = ContextUtil.getBean(Outer.class);
-            // 本地测试使用
-//            Outer outer = new DefaultOuter();
-            outer.print(format);
+        OutContent content = new OutContent();
+        Object result  = null;
+        try {
+
+            if (printParam) {
+                logger.debug("Before method execute...");
+                // 参数格式化
+                Object format = formatter.format(invocation.getMethod().getParameters(), invocation.getArguments());
+                content.setParam(format);
+            }
+            // 计时
+            long start = System.currentTimeMillis();
+
+            // 执行原方法
+            result = invocation.proceed();
+
+            content.setResult(result);
+
+            // 计算方法耗时
+            long spend = System.currentTimeMillis() - start;
+
+            content.setTime(spend);
+
         }
-        Object result = invocation.proceed();
+        catch (Exception e) {
+            throw new ALogException("接口处理失败" + e.getMessage());
+        }
+        finally {
+            // 输出content
+            Outer outer = ContextUtil.getBean(Outer.class);
+            outer.out(content);
+        }
         if (printParam) {
             logger.debug("After method executed...");
         }

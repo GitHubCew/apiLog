@@ -1,14 +1,15 @@
 package api.log.controller;
 
-import api.log.aop.Cache;
-import api.log.execp.ALogException;
+import api.log.base.R;
+import api.log.service.ALogService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Method;
-import java.util.Objects;
+import java.util.Map;
 
 /**
  * @author: chenenwei
@@ -19,26 +20,29 @@ import java.util.Objects;
 @RequestMapping("alog")
 public class ALogController {
 
+    @Autowired
+    private ALogService aLogService;
+
     @GetMapping("/add")
-    public void add (@NonNull String uri) {
-        Method method = Cache.methodMap.get(uri);
-        if (Objects.isNull(method)) {
-            throw new ALogException("Url not match any method");
-        }
-        Cache.put(method);
+    public R<Boolean> add (@NonNull String uri) {
+        aLogService.addMethod(uri);
+        return R.ok(true);
     }
 
     @GetMapping("/remove")
-    public void remove (@NonNull String uri) {
-        Method method = Cache.methodMap.get(uri);
-        if (Objects.isNull(method)) {
-            throw new ALogException("Url not match any method");
-        }
-        Cache.remove(method);
+    public R<Boolean> remove (@NonNull String uri) {
+      aLogService.removeMethod(uri);
+      return R.ok(true);
     }
 
     @GetMapping("/clear")
-    public void clear (@NonNull String uri) {
-        Cache.clear();
+    public R<Boolean> clear (@NonNull String uri) {
+        aLogService.clearAll();
+        return R.ok(true);
+    }
+
+    @GetMapping("/getUris")
+    public R<Map<String, Method>> getUris (String uri) {
+        return aLogService.getUris(uri);
     }
 }

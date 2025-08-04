@@ -3,9 +3,7 @@ package api.log.config;
 import api.log.aop.MethodAdvice;
 import api.log.aop.MethodPointcut;
 import api.log.formater.DefaultParamFormatter;
-import api.log.formater.ParamFormatter;
 import api.log.outer.DefaultOuter;
-import api.log.outer.Outer;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -33,8 +31,7 @@ public class ALogConfig implements ImportBeanDefinitionRegistrar{
     }
 
     @Override
-    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
-                                        BeanDefinitionRegistry registry) {
+    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
 
         registerBean(registry);
         scanPackages(registry, "api.log");

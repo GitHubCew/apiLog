@@ -1,10 +1,12 @@
 package api.log.outer;
 
+import api.log.base.OutContent;
+
 /**
  * @author: chenenwei
  * @date: 2025/7/31
  */
 public interface Outer {
 
-    void print(Object object);
+    void out(OutContent outContent);
 }
