@@ -30,17 +30,12 @@
     输入 'help' 查看可用命令
 
 8.命令介绍
-ALog Terminal 命令帮助:
+- connect 连接 WebSocket 服务器
+- exit/quit 断开 WebSocket 连接
+- clear 清空终端屏幕
+- help 显示本帮助信息
+- monitor [path] 监控指定API接口
+- remove [path] 移除对指定API接口的监控
+- clearall 清空全部监控的API接口
 
-┌──────────────────────────────────────────────────────────────┐
-│  connect          连接 WebSocket 服务器                     │
-│  exit/quit        断开 WebSocket 连接                      │
-│  clear            清空终端屏幕                              │
-│  help             显示本帮助信息                            │
-│  monitor [path]   监控指定API接口                          │
-│                   示例: monitor /api/v1/user               │
-│  remove [path]    移除对指定API接口的监控                   │
-│                   示例: remove /api/v1/user                │
-│  clearall         清空全部监控的API接口                     │
-└──────────────────────────────────────────────────────────────┘
 提示：使用 ↑/↓ 箭头键浏览历史命令
