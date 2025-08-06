@@ -1,6 +1,6 @@
 package api.log.scanner;
 
-import api.log.aop.Cache;
+import api.log.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -36,7 +36,12 @@ public class ApiScanner implements ApplicationListener<ContextRefreshedEvent> {
         handlerMethods.forEach((info, handlerMethod) -> {
             Set<String> urlPatterns = info.getPatternsCondition().getPatterns();
             Method method = handlerMethod.getMethod();
-            urlPatterns.forEach(url -> Cache.methodMap.put(url, method));
+            urlPatterns.forEach(url ->{
+                if (!url.startsWith("/")) {
+                    url = "/" + url;
+                }
+                Cache.methodCache.put(url, method);
+            });
         });
     }
 }

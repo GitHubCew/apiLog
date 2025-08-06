@@ -2,21 +2,29 @@ package api.log.config;
 
 import api.log.aop.MethodAdvice;
 import api.log.aop.MethodPointcut;
+import api.log.base.ContextUtil;
 import api.log.formater.DefaultParamFormatter;
-import api.log.outer.DefaultOuter;
+import api.log.outer.WebSocketOuter;
+import api.log.socket.SessionManager;
+import api.log.socket.SocketHandler;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.*;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+@EnableWebSocket
 @Configuration
 @EnableAspectJAutoProxy
-public class ALogConfig implements ImportBeanDefinitionRegistrar{
+public class ALogConfig implements ImportBeanDefinitionRegistrar, WebSocketConfigurer {
 
-    @Order()
+    @Order
     @Bean
     public MethodPointcut pointcut() {return new MethodPointcut();}
 
@@ -37,6 +45,11 @@ public class ALogConfig implements ImportBeanDefinitionRegistrar{
         scanPackages(registry, "api.log");
     }
 
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(ContextUtil.getBean(SocketHandler.class), "/alog-ws").setAllowedOrigins("*");
+    }
+
     private void registerBean(BeanDefinitionRegistry registry) {
 
         BeanDefinitionBuilder defaultParamFormatterBuilder = BeanDefinitionBuilder
@@ -48,14 +61,14 @@ public class ALogConfig implements ImportBeanDefinitionRegistrar{
         }
 
         BeanDefinitionBuilder defaultOuterBuilder = BeanDefinitionBuilder
-                .rootBeanDefinition(DefaultOuter.class)
+                .rootBeanDefinition(WebSocketOuter.class)
                 .setScope(BeanDefinition.SCOPE_SINGLETON);
 
-        if (!registry.containsBeanDefinition("defaultOuter")) {
-            registry.registerBeanDefinition("defaultOuter", defaultOuterBuilder.getBeanDefinition());
+        if (!registry.containsBeanDefinition("webSocketOuter")) {
+            registry.registerBeanDefinition("webSocketOuter", defaultOuterBuilder.getBeanDefinition());
         }
-    }
 
+    }
 
     private void scanPackages(BeanDefinitionRegistry registry, String... basePackages) {
         ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry);

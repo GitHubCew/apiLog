@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ALog Terminal</title>
+    <script>
+        function getContextPath() {
+            const fullPath = window.location.pathname;
+            const terminalIndex = fullPath.indexOf('/alog-terminal');
+            return terminalIndex > 0 ? fullPath.substring(0, terminalIndex) : '';
+        }
+
+        function getWebSocketUrl() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const host = window.location.host;
+            const contextPath = getContextPath();
+            const userId = 'alog';
+            return `${protocol}//${host}${contextPath}/alog-ws?userId=${userId}`;
+        }
+
+        window.APP_CONFIG = {
+            socketUrl: getWebSocketUrl(),
+            contextPath: getContextPath()
+        };
+    </script>
+    <style>
+        body {
+            background-color: #000;
+            color: #0f0;
+            font-family: monospace;
+            padding: 20px;
+            margin: 0;
+        }
+        #terminal {
+            height: 80vh;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-bottom: 10px;
+        }
+        #input-line {
+            display: flex;
+        }
+        #prompt {
+            margin-right: 5px;
+        }
+        #command-input {
+            background: transparent;
+            border: none;
+            color: #0f0;
+            font-family: monospace;
+            flex-grow: 1;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+<div id="terminal"></div>
+<div id="input-line">
+    <span id="prompt">$</span>
+    <input type="text" id="command-input" autofocus>
+</div>
+
+<script>
+    const terminal = document.getElementById('terminal');
+    const commandInput = document.getElementById('command-input');
+    const promptElement = document.getElementById('prompt');
+
+    let socket = null;
+    let userId = 'alog';
+    let commandHistory = [];
+    let historyIndex = -1;
+    let currentCommand = '';
+
+    const appendToTerminal = (text) => {
+        terminal.innerHTML += text + '\n';
+        terminal.scrollTop = terminal.scrollHeight;
+    };
+
+    const clearTerminal = () => {
+        terminal.innerHTML = '';
+    };
+
+    function updatePrompt(connected = false) {
+        promptElement.textContent = connected ? `${userId}>` : '$';
+    }
+
+    function connectSocket() {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            appendToTerminal('已连接，勿重复连接。');
+            return;
+        }
+
+        socket = new WebSocket(window.APP_CONFIG.socketUrl);
+
+        socket.onopen = () => {
+            appendToTerminal('✅ WebSocket 已连接');
+            updatePrompt(true);
+        };
+        socket.onmessage = (e) => appendToTerminal(e.data);
+        socket.onerror = (e) => appendToTerminal(`❌ WebSocket 错误: ${e.type}`);
+        socket.onclose = () => {
+            appendToTerminal('🔌 WebSocket 已断开');
+            updatePrompt(false);
+        };
+    }
+
+    function disconnectSocket() {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.close();
+            appendToTerminal('🔌 连接已关闭');
+        } else {
+            appendToTerminal('尚未连接或已断开。');
+        }
+    }
+
+    function addToHistory(command) {
+        if (command && (commandHistory.length === 0 || commandHistory[commandHistory.length - 1] !== command)) {
+            commandHistory.push(command);
+            if (commandHistory.length > 50) {
+                commandHistory.shift();
+            }
+        }
+        historyIndex = commandHistory.length;
+    }
+
+    function navigateHistory(direction) {
+        if (commandHistory.length === 0) return;
+
+        if (direction === 'up' && historyIndex > 0) {
+            historyIndex--;
+        } else if (direction === 'down' && historyIndex < commandHistory.length - 1) {
+            historyIndex++;
+        } else if (direction === 'down' && historyIndex === commandHistory.length - 1) {
+            historyIndex++;
+            commandInput.value = currentCommand;
+            return;
+        }
+
+        commandInput.value = commandHistory[historyIndex] || '';
+        setTimeout(() => {
+            commandInput.selectionStart = commandInput.selectionEnd = commandInput.value.length;
+        }, 0);
+    }
+
+    function showHelp() {
+        appendToTerminal("ALog Terminal 命令帮助:");
+        appendToTerminal("┌──────────────────────────────────────────────────────────────┐");
+        appendToTerminal("│  connect          连接 WebSocket 服务器                     │");
+        appendToTerminal("│  exit/quit        断开 WebSocket 连接                      │");
+        appendToTerminal("│  clear            清空终端屏幕                              │");
+        appendToTerminal("│  help             显示本帮助信息                            │");
+        appendToTerminal("│  monitor [path]   监控指定API接口                          │");
+        appendToTerminal("│                   示例: monitor /api/v1/user               │");
+        appendToTerminal("│  remove [path]    移除对指定API接口的监控                   │");
+        appendToTerminal("│                   示例: remove /api/v1/user                │");
+        appendToTerminal("│  clearall         清空全部监控的API接口                     │");
+        appendToTerminal("└──────────────────────────────────────────────────────────────┘");
+        appendToTerminal("提示：使用 ↑/↓ 箭头键浏览历史命令");
+    }
+
+    // 新增焦点事件处理
+    commandInput.addEventListener('focus', () => {
+        historyIndex = commandHistory.length;
+        currentCommand = commandInput.value;
+    });
+
+    commandInput.addEventListener('blur', () => {
+        currentCommand = commandInput.value;
+    });
+
+    // 监听输入框
+    commandInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const input = commandInput.value.trim();
+            commandInput.value = '';
+
+            if (!input) return;
+
+            appendToTerminal(`${promptElement.textContent} ${input}`);
+            addToHistory(input);
+            currentCommand = '';
+
+            switch (input.toLowerCase()) {
+                case 'connect':
+                    connectSocket();
+                    break;
+                case 'exit':
+                case 'quit':
+                    disconnectSocket();
+                    break;
+                case 'clear':
+                    clearTerminal();
+                    break;
+                case 'help':
+                    showHelp();
+                    break;
+                default:
+                    if (socket && socket.readyState === WebSocket.OPEN) {
+                        socket.send(input);
+                    } else {
+                        appendToTerminal('⚠️ 未连接 WebSocket，输入 `connect` 连接。');
+                    }
+            }
+        } else if (e.ctrlKey && e.key === 'd') {
+            appendToTerminal('退出连接（Ctrl+D）');
+            disconnectSocket();
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (historyIndex === commandHistory.length) {
+                currentCommand = commandInput.value;
+            }
+            navigateHistory('up');
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            navigateHistory('down');
+        }
+    });
+
+    // 初始提示
+    appendToTerminal("┌──────────────────────────────┐");
+    appendToTerminal("│   欢迎使用 ALog Terminal    │");
+    appendToTerminal("│        作者: chenenwei      │");
+    appendToTerminal("└──────────────────────────────┘\n");
+
+    appendToTerminal("输入 'help' 查看可用命令");
+</script>
+</body>
+</html>

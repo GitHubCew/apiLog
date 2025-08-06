@@ -1,5 +1,6 @@
 package api.log.aop;
 
+import api.log.cache.Cache;
 import org.springframework.aop.ClassFilter;
 import org.springframework.aop.MethodMatcher;
 import org.springframework.aop.Pointcut;
@@ -36,7 +37,7 @@ public class MethodPointcut implements Pointcut{
             @Override
             public boolean matches(Method method, Class<?> targetClass, Object... args) {
                 // 运行时检查 - 每次方法调用都执行
-                return Cache.contains(method);
+                return Cache.hasMethod(method);
             }
         };
     }
