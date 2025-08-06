@@ -144,17 +144,18 @@
 
     function showHelp() {
         appendToTerminal("ALog Terminal 命令帮助:");
-        appendToTerminal("┌──────────────────────────────────────────────────────────────┐");
-        appendToTerminal("│  connect          连接 WebSocket 服务器                     │");
-        appendToTerminal("│  exit/quit        断开 WebSocket 连接                      │");
-        appendToTerminal("│  clear            清空终端屏幕                              │");
-        appendToTerminal("│  help             显示本帮助信息                            │");
-        appendToTerminal("│  monitor [path]   监控指定API接口                          │");
-        appendToTerminal("│                   示例: monitor /api/v1/user               │");
-        appendToTerminal("│  remove [path]    移除对指定API接口的监控                   │");
-        appendToTerminal("│                   示例: remove /api/v1/user                │");
-        appendToTerminal("│  clearall         清空全部监控的API接口                     │");
-        appendToTerminal("└──────────────────────────────────────────────────────────────┘");
+        appendToTerminal("┌─────────────────────────────────────────────────────────────────────────────────────────────┐");
+        appendToTerminal("│  connect                                     连接 WebSocket 服务器                     │");
+        appendToTerminal("│  exit/quit                                   断开 WebSocket 连接                       │");
+        appendToTerminal("│  clear                                       清空终端屏幕                               │");
+        appendToTerminal("│  help                                        显示本帮助信息                             │");
+        appendToTerminal("│  ls [path]                                   列出API接口,支持模糊搜索                    │");
+        appendToTerminal("│  monitor [path] [param | result | time]      监控指定API接口                            │");
+        appendToTerminal("│                                              示例: monitor /api/v1/user param,time     │");
+        appendToTerminal("│  remove [path]                               移除对指定API接口的监控                     │");
+        appendToTerminal("│                                              示例: remove /api/v1/user                 │");
+        appendToTerminal("│  clearall                                    清空全部监控的API接口                       │");
+        appendToTerminal("└─────────────────────────────────────────────────────────────────────────────────────────────┘");
         appendToTerminal("提示：使用 ↑/↓ 箭头键浏览历史命令");
     }
 

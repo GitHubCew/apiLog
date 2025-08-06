@@ -8,8 +8,11 @@ import api.log.cache.Cache;
 import api.log.socket.SessionContext;
 import api.log.socket.SessionManager;
 import api.log.socket.SocketHandler;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -17,6 +20,8 @@ import java.util.Map;
  * @date: 2025/8/5
  */
 public class WebSocketOuter implements Outer{
+
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void out(Method method, OutContent outContent) {
@@ -30,13 +35,17 @@ public class WebSocketOuter implements Outer{
                 }
                 StringBuilder sb = new StringBuilder();
                 if (monitorInfo.isParam()) {
-                    sb.append(outContent.getParam()).append(Constant.SEPARATOR);
+                    appendValue(sb, objectMapper, outContent.getResult());
+                    sb.append(Constant.SEPARATOR);
+
                 }
                 if (monitorInfo.isResult()) {
-                    sb.append(outContent.getResult()).append(Constant.SEPARATOR);
+                    appendValue(sb, objectMapper, outContent.getResult());
+                    sb.append(Constant.SEPARATOR);
+
                 }
                 if (monitorInfo.isTime()) {
-                    sb.append(outContent.getTime());
+                    appendValue(sb, objectMapper, outContent.getResult());
                 }
                 // 发送消息
                 ContextUtil.getBean(SocketHandler.class).sendToClient(session.getSession(), sb.toString().replaceAll(Constant.SEPARATOR, Constant.LINE_SEPARATOR));
@@ -44,5 +53,30 @@ public class WebSocketOuter implements Outer{
                 e.printStackTrace();
             }
         });
+    }
+
+    // 处理各种类型的值
+    private void appendValue(StringBuilder sb, ObjectMapper mapper, Object value) throws JsonProcessingException {
+        if (value == null) {
+            sb.append("null");
+            return;
+        }
+
+        // 基本类型直接toString
+        if (value.getClass().isPrimitive() ||
+                value instanceof Number ||
+                value instanceof Boolean ||
+                value instanceof Character ||
+                value instanceof String) {
+            sb.append(value);
+        }
+        // 数组类型
+        else if (value.getClass().isArray()) {
+            sb.append(Arrays.toString((Object[])value));
+        }
+        // 其他对象类型使用JSON序列化
+        else {
+            sb.append(mapper.writeValueAsString(value));
+        }
     }
 }
