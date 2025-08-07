@@ -2,7 +2,6 @@ package api.log.socket;
 
 import org.springframework.web.socket.WebSocketSession;
 
-import java.util.Objects;
 
 /**
  * @author: chenenwei
@@ -44,7 +43,4 @@ public class SessionContext {
         this.connected = connected;
     }
 
-    private String extractUserId(String query) {
-        return query.split("=")[1];
-    }
 }

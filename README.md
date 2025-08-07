@@ -26,8 +26,8 @@ api-log是一个基于SpringBoot + Websocket 开发的接口监测的web端命�
    例如：Shiro中添加：
       
    ```java
-   filters.put("/alog-ws", "anon");
-   filters.put("/alog-terminal/**", "anon");
+   filters.put("/alog-ws**", "anon");
+   filters.put("/alog-terminal.html", "anon");
    ```
     
 
@@ -35,8 +35,8 @@ api-log是一个基于SpringBoot + Websocket 开发的接口监测的web端命�
 5. 启动项目
 
 
-6. 访问项目web + `/alog-terminal/alog-terminal.html`  
-   例如： `localhost:80/context/alog-terminal/alog-terminal.html` (context: 为项目的context-path上下文)
+6. 访问项目web + `/alog-terminal.html`  
+   例如： `localhost:80/context/alog-terminal.html` (context: 为项目的context-path上下文)
 
 
 7. 进入alog,如果出现如下界面，则成功
