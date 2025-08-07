@@ -65,6 +65,24 @@ api-log是一个基于SpringBoot + Websocket 开发的接口监测的web端命�
 
 提示：使用 ↑/↓ 箭头键浏览历史命令
 
-# 使用例子
+# 例子
 
+```shell 
+
+# 连接 WebSocket 服务器
+$ connect
+✅ WebSocket 已连接
+
+# 监测 /activityWalkRouteActivity/info 的入参和耗时
+alog> monitor /activityWalkRouteActivity/info param,time
+success
+
+# 这里需要自己触发调用接口/activityWalkRouteActivity/info
+
+# 监测返回的结果和耗时
+"id":495 
+151
+
+
+``` 
 
