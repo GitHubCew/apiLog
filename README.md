@@ -1,3 +1,9 @@
+# api-log 介绍
+
+api-log是一个基于SpringBoot + Websocket 开发的接口监测的web端命令行工具
+支持对一个或多个接口的的入参、返回值、耗时进行检测，可以解决和一些复杂场景下接口
+参数、耗时无法检测的问题。
+
 # 使用步骤：
 
 1. 使用git clone 项目
@@ -20,8 +26,8 @@
    例如：Shiro中添加：
       
    ```java
-   filters.put("/alog-ws", "anon");
-   filters.put("/alog-terminal/**", "anon");
+   filters.put("/alog-ws**", "anon");
+   filters.put("/alog-terminal.html", "anon");
    ```
     
 
@@ -29,8 +35,8 @@
 5. 启动项目
 
 
-6. 访问项目web + `/alog-terminal/alog-terminal.html`  
-   例如： `localhost:80/context/alog-terminal/alog-terminal.html` (context: 为项目的context-path上下文)
+6. 访问项目web + `/alog-terminal.html`  
+   例如： `localhost:80/context/alog-terminal.html` (context: 为项目的context-path上下文)
 
 
 7. 进入alog,如果出现如下界面，则成功
@@ -58,3 +64,25 @@
 - clearall 清空全部监控的API接口
 
 提示：使用 ↑/↓ 箭头键浏览历史命令
+
+# 例子
+
+```shell 
+
+# 连接 WebSocket 服务器
+$ connect
+✅ WebSocket 已连接
+
+# 监测 /activityWalkRouteActivity/info 的入参和耗时
+alog> monitor /activityWalkRouteActivity/info param,time
+success
+
+# 这里需要自己触发调用接口/activityWalkRouteActivity/info
+
+# 监测返回的结果和耗时
+"id":495 
+151
+
+
+``` 
+

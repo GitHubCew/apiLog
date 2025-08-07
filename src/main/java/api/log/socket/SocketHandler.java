@@ -45,7 +45,7 @@ public class SocketHandler extends TextWebSocketHandler {
         try {
            executeCommand(cmd, sessionManager.getSession(session.getId()));
         } catch (Exception e) {
-            session.sendMessage(new TextMessage("Error: " + e.getMessage() + "\n"));
+            session.sendMessage(new TextMessage("Error: " + e.getMessage() + Constant.LINE_SEPARATOR));
         }
     }
 
@@ -63,7 +63,7 @@ public class SocketHandler extends TextWebSocketHandler {
             if (trimCmd.startsWith("ls")) {
                 Ls ls = new Ls(trimCmd);
                 result = ls.exec(userId);
-                sendToClient(session, result.toString().replace(Constant.SEPARATOR, "\n"));
+                sendToClient(session, result.toString().replace(Constant.SEPARATOR, Constant.LINE_SEPARATOR));
             }
             else if (trimCmd.startsWith("monitor")) {
                 result = new Monitor(trimCmd).exec(userId);
@@ -85,7 +85,7 @@ public class SocketHandler extends TextWebSocketHandler {
     public void sendToClient(WebSocketSession session, String message) {
         try {
             if (session.isOpen()) {
-                session.sendMessage(new TextMessage(message + "\n"));
+                session.sendMessage(new TextMessage(message + Constant.LINE_SEPARATOR));
             }
         } catch (IOException e) {
             e.printStackTrace();

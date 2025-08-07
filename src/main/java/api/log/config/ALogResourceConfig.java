@@ -21,8 +21,8 @@ public class ALogResourceConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
         // 强制注册资源路径（即使主项目没有配置）
-        registry.addResourceHandler("/alog-terminal/**")
-                .addResourceLocations("classpath:/META-INF/resources/alog-terminal/")
+        registry.addResourceHandler("/alog-terminal.html")
+                .addResourceLocations("classpath:/META-INF/resources/")
                 .setCachePeriod(3600)
                 .resourceChain(true);
     }
