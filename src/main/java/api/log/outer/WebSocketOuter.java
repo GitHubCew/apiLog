@@ -35,7 +35,7 @@ public class WebSocketOuter implements Outer{
                 }
                 StringBuilder sb = new StringBuilder();
                 if (monitorInfo.isParam()) {
-                    appendValue(sb, objectMapper, outContent.getResult());
+                    appendValue(sb, objectMapper, outContent.getParam());
                     sb.append(Constant.SEPARATOR);
 
                 }
@@ -45,7 +45,7 @@ public class WebSocketOuter implements Outer{
 
                 }
                 if (monitorInfo.isTime()) {
-                    appendValue(sb, objectMapper, outContent.getResult());
+                    appendValue(sb, objectMapper, outContent.getTime());
                 }
                 // 发送消息
                 ContextUtil.getBean(SocketHandler.class).sendToClient(session.getSession(), sb.toString().replaceAll(Constant.SEPARATOR, Constant.LINE_SEPARATOR));
