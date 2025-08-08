@@ -8,6 +8,12 @@ api-log是一个基于SpringBoot + Websocket 开发的接口监测的web端命�
 
 1. 使用git clone 项目
 2. 使用maven install 命令安装到本地maven仓库
+
+或者从Maven中央仓库拉取最新依赖：
+
+[Maven中央仓库地址(Sonatype Central)](https://central.sonatype.com/artifact/io.github.githubcew/api-log/)
+
+
 3. 在项目中引用依赖:
 
 ```xml
@@ -17,14 +23,6 @@ api-log是一个基于SpringBoot + Websocket 开发的接口监测的web端命�
             <version>${version}</version>
         </dependency>
 ```
-
-
-
-或者Maven中央仓库最新版本依赖：
-
-[Maven中央仓库地址(Sonatype Central)](https://central.sonatype.com/artifact/io.github.githubcew/api-log/)
-
-
 
    1. 如果项目中有安全校验，则需要放开路径：
        - `/alog-ws`
