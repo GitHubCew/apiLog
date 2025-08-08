@@ -1,11 +1,10 @@
-package api.log.config;
+package api.log.core.config;
 
 import api.log.aop.MethodAdvice;
 import api.log.aop.MethodPointcut;
-import api.log.base.ContextUtil;
-import api.log.formater.DefaultParamFormatter;
-import api.log.outer.WebSocketOuter;
-import api.log.socket.SocketHandler;
+import api.log.business.formater.DefaultParamFormatter;
+import api.log.business.outer.WebSocketOuter;
+import api.log.business.socket.SocketHandler;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,7 +25,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 @Configuration
 @EnableAspectJAutoProxy
-public class ALogConfig implements ImportBeanDefinitionRegistrar, WebSocketConfigurer {
+public class ALogAutoConfiguration implements ImportBeanDefinitionRegistrar, WebSocketConfigurer {
 
     @Qualifier("alogSocketHandler")
     @Autowired

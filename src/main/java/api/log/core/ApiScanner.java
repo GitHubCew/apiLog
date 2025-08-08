@@ -1,6 +1,6 @@
-package api.log.scanner;
+package api.log.core;
 
-import api.log.cache.Cache;
+import api.log.core.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;

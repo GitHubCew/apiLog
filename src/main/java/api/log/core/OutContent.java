@@ -1,4 +1,4 @@
-package api.log.base;
+package api.log.core;
 
 /**
  * 输出内容

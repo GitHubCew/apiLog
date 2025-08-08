@@ -1,4 +1,4 @@
-package api.log.execp;
+package api.log.core;
 
 /**
  * 异常类

@@ -1,4 +1,4 @@
-package api.log.cmd;
+package api.log.business.cmd;
 
 import java.util.Arrays;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package api.log.base;
+package api.log.core;
 
 import java.lang.reflect.Method;
 

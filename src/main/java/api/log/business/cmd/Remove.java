@@ -1,6 +1,6 @@
-package api.log.cmd;
+package api.log.business.cmd;
 
-import api.log.cache.Cache;
+import api.log.core.Cache;
 
 /**
  * 移除命令
