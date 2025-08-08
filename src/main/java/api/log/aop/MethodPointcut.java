@@ -1,6 +1,6 @@
 package api.log.aop;
 
-import api.log.cache.Cache;
+import api.log.core.Cache;
 import org.springframework.aop.ClassFilter;
 import org.springframework.aop.MethodMatcher;
 import org.springframework.aop.Pointcut;

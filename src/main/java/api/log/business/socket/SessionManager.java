@@ -1,4 +1,4 @@
-package api.log.socket;
+package api.log.business.socket;
 
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package api.log.cmd;
+package api.log.business.cmd;
 
 /**
  * 命令接口

@@ -1,6 +1,6 @@
-package api.log.outer;
+package api.log.business.outer;
 
-import api.log.base.OutContent;
+import api.log.core.OutContent;
 
 import java.lang.reflect.Method;
 

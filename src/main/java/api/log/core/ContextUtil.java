@@ -1,4 +1,4 @@
-package api.log.base;
+package api.log.core;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

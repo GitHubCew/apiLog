@@ -1,6 +1,6 @@
-package api.log.cmd;
+package api.log.business.cmd;
 
-import api.log.cache.Cache;
+import api.log.core.Cache;
 
 /**
  * 清除所有方法命令
