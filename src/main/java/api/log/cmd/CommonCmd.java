@@ -4,31 +4,57 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * @author: chenenwei
- * @date: 2025/8/5
+ * 通用命令实现类
+ * @author  chenenwei
  */
 public class CommonCmd implements Cmd{
 
+    /**
+     * 命令
+     */
     protected String cmd;
 
+    /**
+     * 参数
+     */
     protected String[] args;
 
+    /**
+     * 获取命令
+     * @return 命令
+     */
     public String getCmd() {
         return cmd;
     }
 
+    /**
+     * 设置命令
+     * @param cmd 命令
+     */
     public void setCmd(String cmd) {
         this.cmd = cmd;
     }
 
+    /**
+     * 获取参数
+     * @return 参数
+     */
     public String[] getArgs() {
         return args;
     }
 
+    /**
+     * 设置参数
+     * @param args 参数
+     */
     public void setArgs(String[] args) {
         this.args = args;
     }
 
+    /**
+     * 构造函数
+     * @param args 参数
+     */
     public CommonCmd (String args) {
 
         String[] parts = args.split("\\s+");
@@ -44,16 +70,33 @@ public class CommonCmd implements Cmd{
         this.args = arguments;
     }
 
+    /**
+     * 检查参数是否合法
+     * @param args 参数
+     * @return 错误信息
+     */
     @Override
     public String check(String[] args){
         return null;
     }
 
+    /**
+     * 执行命令
+     * @param user 用户
+     * @param cmd 命令
+     * @param args 参数
+     * @return 执行结果
+     */
     @Override
     public Object execute(String user, String cmd, String[] args) {
         return null;
     }
 
+    /**
+     * 执行命令
+     * @param user 用户
+     * @return 执行结果
+     */
     public Object exec(String user) {
 
         try {

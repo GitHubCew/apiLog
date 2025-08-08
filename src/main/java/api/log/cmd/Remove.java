@@ -3,15 +3,24 @@ package api.log.cmd;
 import api.log.cache.Cache;
 
 /**
- * @author: chenenwei
- * @date: 2025/8/6
+ * 移除命令
+ * @author  chenenwei
  */
 public class Remove extends CommonCmd{
 
+    /**
+     * 构造函数
+     * @param args 参数
+     */
     public Remove(String args) {
         super(args);
     }
 
+    /**
+     * 检查参数是否合法
+     * @param args 参数
+     * @return 错误信息
+     */
     @Override
     public String check(String[] args) {
         if (args.length != 1) {
@@ -24,6 +33,13 @@ public class Remove extends CommonCmd{
         return "";
     }
 
+    /**
+     * 执行命令
+     * @param user 用户
+     * @param cmd 命令
+     * @param args 参数
+     * @return 执行结果
+     */
     @Override
     public Object execute(String user, String cmd, String[] args) {
         Cache.removeMethod(user, Cache.getMethod(args[0]));

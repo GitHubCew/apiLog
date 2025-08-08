@@ -6,7 +6,7 @@
     <script>
         function getContextPath() {
             const fullPath = window.location.pathname;
-            const terminalIndex = fullPath.indexOf('/alog-terminal.html');
+            const terminalIndex = fullPath.indexOf('/alog/alog-terminal.html');
             return terminalIndex > 0 ? fullPath.substring(0, terminalIndex) : '';
         }
 
@@ -14,7 +14,11 @@
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
             const host = window.location.host;
             const contextPath = getContextPath();
-            return `${protocol}//${host}${contextPath}/alog-ws`;
+            console.log(`host: ${host}`);
+            console.log(`contextPath: ${contextPath}`);
+            const socketUrl = `${protocol}//${host}${contextPath}/alog-ws`;
+            console.log(`WebSocket URL: ${socketUrl}`);
+            return socketUrl;
         }
 
         window.APP_CONFIG = {

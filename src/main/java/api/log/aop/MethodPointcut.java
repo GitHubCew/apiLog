@@ -8,16 +8,24 @@ import org.springframework.aop.Pointcut;
 import java.lang.reflect.Method;
 
 /**
- * @author: chenenwei
- * @date: 2025/7/29
+ * 方法拦截
+ * @author  chenenwei
  */
 public class MethodPointcut implements Pointcut{
 
+    /**
+     * 获取类过滤器
+     * @return 类过滤器
+     */
     @Override
     public ClassFilter getClassFilter() {
         return clazz -> clazz.getSimpleName().toLowerCase().endsWith("controller");
     }
 
+    /**
+     * 获取方法匹配器
+     * @return 方法匹配器
+     */
     @Override
     public MethodMatcher getMethodMatcher() {
         return new MethodMatcher() {

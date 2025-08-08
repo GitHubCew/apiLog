@@ -9,11 +9,17 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
 /**
- * @author: chenenwei
- * @date: 2025/7/29
+ * 方法增强
+ * @author  chenenwei
  */
 public class MethodAdvice implements MethodInterceptor {
 
+    /**
+     * 拦截方法
+     * @param invocation 方法调用
+     * @return 返回值
+     * @throws Throwable 异常
+     */
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
 

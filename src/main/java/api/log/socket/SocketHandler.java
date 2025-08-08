@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
- * @author: chenenwei
- * @date: 2025/8/5
+ * WebSocket处理器
+ * @author  chenenwei
  */
 @Component("alogSocketHandler")
 public class SocketHandler extends TextWebSocketHandler {
@@ -27,17 +27,39 @@ public class SocketHandler extends TextWebSocketHandler {
     @Autowired
     private SessionManager sessionManager;
 
+    /**
+     * 构造方法
+     */
+    public SocketHandler(){
+
+    }
+    /**
+     * 连接建立
+     * @param session session
+     */
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         SessionContext context = new SessionContext(session);
         sessionManager.addSession(session.getId(), context);
     }
 
+    /**
+     * 连接关闭
+     * @param session session
+     * @param status 状态
+     * @throws Exception 异常
+     */
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         sessionManager.removeSession(session.getId());
     }
 
+    /**
+     * 处理消息
+     * @param session session
+     * @param message 消息
+     * @throws Exception 异常
+     */
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 
@@ -49,7 +71,12 @@ public class SocketHandler extends TextWebSocketHandler {
         }
     }
 
-
+    /**
+     * 执行命令
+     * @param cmd 命令
+     * @param context session上下文
+     * @throws IOException 异常
+     */
     private void executeCommand(String cmd, SessionContext context) throws IOException {
 
         WebSocketSession session = context.getSession();
@@ -63,7 +90,7 @@ public class SocketHandler extends TextWebSocketHandler {
             if (trimCmd.startsWith("ls")) {
                 Ls ls = new Ls(trimCmd);
                 result = ls.exec(userId);
-                sendToClient(session, result.toString().replace(Constant.SEPARATOR, Constant.LINE_SEPARATOR));
+                sendToClient(session, result.toString().replace(Constant.CONCAT_SEPARATOR, Constant.LINE_SEPARATOR));
             }
             else if (trimCmd.startsWith("monitor")) {
                 result = new Monitor(trimCmd).exec(userId);
@@ -82,6 +109,11 @@ public class SocketHandler extends TextWebSocketHandler {
         }
     }
 
+    /**
+     * 发送消息到客户端
+     * @param session session
+     * @param message 消息
+     */
     public void sendToClient(WebSocketSession session, String message) {
         try {
             if (session.isOpen()) {

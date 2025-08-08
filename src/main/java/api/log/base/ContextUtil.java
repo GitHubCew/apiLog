@@ -6,19 +6,30 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 /**
- * @author: chenenwei
- * @date: 2025/7/29
+ * 上下文工具
+ * @author  chenenwei
  */
-@Component()
+@Component
 public class ContextUtil implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
 
+    /**
+     * 设置ApplicationContext
+     * @param applicationContext applicationContext
+     * @throws BeansException 异常
+     */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         ContextUtil.applicationContext = applicationContext;
     }
 
+    /**
+     * 获取bean
+     * @param beanClass beanClass
+     * @param <T> 泛型
+     * @return bean
+     */
     public static <T> T getBean(Class<T> beanClass) {
         return applicationContext.getBean(beanClass);
     }
