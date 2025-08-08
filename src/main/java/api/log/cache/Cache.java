@@ -9,8 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * @author: chenenwei
- * @date: 2025/7/29
+ * 缓存
+ * @author  chenenwei
  */
 public class Cache {
 
@@ -35,7 +35,11 @@ public class Cache {
         methodUsers = new ConcurrentHashMap<>(1);
     }
 
-
+    /**
+     * 获取方法
+     * @param uri uri
+     * @return 方法
+     */
     public static Method getMethod (String uri) {
         return methodCache.get(uri);
     }
@@ -93,7 +97,7 @@ public class Cache {
      * 是否包含用户
      * @param method 方法
      * @param user 用户
-     * @return
+     * @return 是否包含
      */
     public static boolean containsUser (Method method, String user) {
         if(methodUsers.containsKey(method)) {
@@ -105,7 +109,7 @@ public class Cache {
     /**
      * 是否包含某个用户
      * @param user 用户
-     * @return
+     * @return 是否包含
      */
     public static boolean hasUser (String user) {
         return userMethods.containsKey(user);
@@ -113,8 +117,7 @@ public class Cache {
 
     /**
      * 清除用户方法
-     * @param user
-     * @return
+     * @param user 用户
      */
     public static void clearUser (String user) {
         if(userMethods.containsKey(user)) {
@@ -168,7 +171,7 @@ public class Cache {
      * 是否包含方法
      * @param user 用户
      * @param method 方法
-     * @return
+     * @return 是否包含
      */
     public static boolean containsMethod (String user, Method method) {
         if(userMethods.containsKey(user)) {
@@ -180,12 +183,17 @@ public class Cache {
     /**
      * 是否包含某个方法
      * @param method 方法
-     * @return
+     * @return 是否包含
      */
     public static boolean hasMethod (Method method) {
         return methodUsers.containsKey(method);
     }
 
+    /**
+     * 清除方法
+     * @param method 方法
+     * @return 是否成功
+     */
     public static boolean clearMethod (Method method) {
         if(methodUsers.containsKey(method)) {
             methodUsers.remove(method);
@@ -194,10 +202,20 @@ public class Cache {
         return false;
     }
 
+    /**
+     * 是否包含uri
+     * @param uri uri
+     * @return 是否包含
+     */
     public static boolean hasUri (String uri) {
         return methodCache.containsKey(uri);
     }
 
+    /**
+     * 获取某个方法的所有用户
+     * @param method  方法
+     * @return 所有用户
+     */
     public static Map<String, MonitorInfo> getUsersByMethod (Method method) {
         if(!methodUsers.containsKey(method)) {
             return Collections.emptyMap();

@@ -1,3 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-api.log.config.ALogConfig,\
-api.log.config.ALogResourceConfig
+api.log.config.ALogConfig

@@ -3,8 +3,8 @@ package api.log.formater;
 import java.lang.reflect.Parameter;
 
 /**
- * @author: chenenwei
- * @date: 2025/7/29
+ * 参数格式器
+ * @author  chenenwei
  */
 public interface ParamFormatter {
 
@@ -12,7 +12,7 @@ public interface ParamFormatter {
      * 参数格式化
      * @param parameters 参数列表
      * @param parameterValues 参数值列表
-     * @return
+     * @return 格式化后的参数值
      */
     Object format(Parameter[] parameters, Object[] parameterValues);
 }

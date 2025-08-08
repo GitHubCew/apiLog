@@ -7,11 +7,16 @@ import java.util.*;
 
 /**
  * 默认的参数格式化器
- * @author: chenenwei
- * @date: 2025/7/29
+ * @author  chenenwei
  */
 public class DefaultParamFormatter implements ParamFormatter{
 
+    /**
+     * 格式化
+     * @param parameters 参数列表
+     * @param parameterValues 参数值列表
+     * @return 格式化后的参数字符串
+     */
     @Override
     public Object format(Parameter[] parameters, Object[] parameterValues) {
         StringBuilder sb = new StringBuilder();
@@ -22,6 +27,11 @@ public class DefaultParamFormatter implements ParamFormatter{
         return sb.toString();
     }
 
+    /**
+     * 格式化参数值
+     * @param value 参数值
+     * @return 格式化后的参数值字符串
+     */
     private String formatValue(Object value) {
         if (value == null) {
             return "null";
@@ -51,7 +61,11 @@ public class DefaultParamFormatter implements ParamFormatter{
         return formatObject(value);
     }
 
-    // 判断是否为基本类型或包装类型
+    /**
+     * 判断是否为基本类型或包装类型
+     * @param clazz 类
+     * @return true/false
+     */
     private boolean isPrimitiveOrWrapper(Class<?> clazz) {
         return clazz.isPrimitive() ||
                 clazz == Integer.class ||
@@ -65,7 +79,11 @@ public class DefaultParamFormatter implements ParamFormatter{
                 clazz == String.class;
     }
 
-    // 格式化数组
+    /**
+     * 格式化数组
+     * @param array 数组
+     * @return 格式化后的数组字符串
+     */
     private String formatArray(Object array) {
         StringBuilder sb = new StringBuilder("[");
         int length = Array.getLength(array);
@@ -76,7 +94,11 @@ public class DefaultParamFormatter implements ParamFormatter{
         return sb.append("]").toString();
     }
 
-    // 格式化集合
+    /**
+     * 格式化集合
+     * @param collection 集合
+     * @return 格式化后的集合字符串
+     */
     private String formatCollection(Collection<?> collection) {
         StringBuilder sb = new StringBuilder("[");
         Iterator<?> it = collection.iterator();
@@ -87,7 +109,11 @@ public class DefaultParamFormatter implements ParamFormatter{
         return sb.append("]").toString();
     }
 
-    // 格式化Map
+    /**
+     * 格式化Map
+     * @param map Map
+     * @return 格式化后的Map字符串
+     */
     private String formatMap(Map<?, ?> map) {
         StringBuilder sb = new StringBuilder("{");
         Iterator<? extends Map.Entry<?, ?>> it = map.entrySet().iterator();
@@ -101,7 +127,11 @@ public class DefaultParamFormatter implements ParamFormatter{
         return sb.append("}").toString();
     }
 
-    // 格式化普通对象（递归遍历字段）
+    /**
+     * 格式化普通对象（递归遍历字段）
+     * @param obj 对象
+     * @return 格式化后的对象字符串
+     */
     private String formatObject(Object obj) {
         try {
             StringBuilder sb = new StringBuilder("{");
@@ -122,7 +152,11 @@ public class DefaultParamFormatter implements ParamFormatter{
         }
     }
 
-    // 递归获取类及其父类的所有字段
+    /**
+     * 递归获取类及其父类的所有字段
+     * @param clazz 类
+     * @return 字段列表
+     */
     private List<Field> getAllFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<>();
         while (clazz != null && clazz != Object.class) {

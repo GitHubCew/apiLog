@@ -14,8 +14,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author: chenenwei
- * @date: 2025/7/31
+ * 接口扫描器
+ * @author  chenenwei
  */
 @Component
 public class ApiScanner implements ApplicationListener<ContextRefreshedEvent> {
@@ -23,11 +23,18 @@ public class ApiScanner implements ApplicationListener<ContextRefreshedEvent> {
     @Autowired
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
 
+    /**
+     * Spring容器初始化完成后，扫描接口
+     * @param event Spring事件
+     */
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         scan();
     }
 
+    /**
+     * 扫描接口
+     */
     private void scan () {
         // 获取Spring MVC中所有的RequestMapping信息
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();

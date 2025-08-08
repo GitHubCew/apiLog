@@ -5,32 +5,51 @@ import api.log.aop.MethodPointcut;
 import api.log.base.ContextUtil;
 import api.log.formater.DefaultParamFormatter;
 import api.log.outer.WebSocketOuter;
-import api.log.socket.SessionManager;
 import api.log.socket.SocketHandler;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.*;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+/**
+ * 自动配置类
+ */
 @EnableWebSocket
 @Configuration
 @EnableAspectJAutoProxy
 public class ALogConfig implements ImportBeanDefinitionRegistrar, WebSocketConfigurer {
 
-    @Order
+    @Qualifier("alogSocketHandler")
+    @Autowired
+    private SocketHandler socketHandler; // 直接注入
+
+    /**
+     * 切点
+     * @return 切点
+     */
     @Bean
     public MethodPointcut pointcut() {return new MethodPointcut();}
 
+    /**
+     * 通知
+     * @return 通知
+     */
     @Bean
     public MethodAdvice advice() {return new MethodAdvice();}
 
+    /**
+     * 默认切面
+     * @return 切面
+     */
     @Bean
     public DefaultPointcutAdvisor defaultPointcutAdvisor() {
         DefaultPointcutAdvisor advisor = new DefaultPointcutAdvisor(pointcut(), advice());
@@ -38,6 +57,23 @@ public class ALogConfig implements ImportBeanDefinitionRegistrar, WebSocketConfi
         return advisor;
     }
 
+    @Bean
+    public WebMvcConfigurer alogTerminalWebMvcConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addResourceHandlers(ResourceHandlerRegistry registry) {
+                registry.addResourceHandler("/alog/**")
+                        .addResourceLocations("classpath:/META-INF/resources/")
+                        .resourceChain(true);
+            }
+        };
+    }
+
+    /**
+     * 注册BeanDefinition
+     * @param importingClassMetadata importingClassMetadata
+     * @param registry registry
+     */
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
 
@@ -45,11 +81,19 @@ public class ALogConfig implements ImportBeanDefinitionRegistrar, WebSocketConfi
         scanPackages(registry, "api.log");
     }
 
+    /**
+     * 注册WebSocketHandler
+     * @param registry registry
+     */
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(ContextUtil.getBean(SocketHandler.class), "/alog-ws").setAllowedOrigins("*");
+        registry.addHandler(socketHandler, "/alog-ws").setAllowedOrigins("*");
     }
 
+    /**
+     * 注册Bean
+     * @param registry registry
+     */
     private void registerBean(BeanDefinitionRegistry registry) {
 
         BeanDefinitionBuilder defaultParamFormatterBuilder = BeanDefinitionBuilder
@@ -70,6 +114,11 @@ public class ALogConfig implements ImportBeanDefinitionRegistrar, WebSocketConfi
 
     }
 
+    /**
+     * 扫描包
+     * @param registry registry
+     * @param basePackages basePackages
+     */
     private void scanPackages(BeanDefinitionRegistry registry, String... basePackages) {
         ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry);
         scanner.scan(basePackages);

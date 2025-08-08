@@ -6,18 +6,26 @@ import api.log.cache.Cache;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
- * @author: chenenwei
- * @date: 2025/8/5
+ * 监控命令
+ * @author  chenenwei
  */
 public class Monitor extends CommonCmd{
 
+    /**
+     * 构造函数
+     * @param args 参数
+     */
     public Monitor(String args) {
         super(args);
     }
 
+    /**
+     * 检查参数是否正确
+     * @param args 参数
+     * @return 错误信息
+     */
     @Override
     public String check(String[] args) {
 
@@ -38,6 +46,13 @@ public class Monitor extends CommonCmd{
         return "";
     }
 
+    /**
+     * 执行命令
+     * @param user 用户
+     * @param cmd 命令
+     * @param args 参数
+     * @return 执行结果
+     */
     @Override
     public String execute(String user, String cmd, String[] args) {
         Method method = Cache.getMethod(args[0].trim());

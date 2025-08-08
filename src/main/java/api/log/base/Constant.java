@@ -1,12 +1,18 @@
 package api.log.base;
 
 /**
- * @author: chenenwei
- * @date: 2025/8/6
+ * 常量类
+ * @author  chenenwei
  */
 public class Constant {
 
-    public final static String SEPARATOR = "@@";
+    /**
+     * 拼接符
+     */
+    public final static String CONCAT_SEPARATOR = "@@";
 
+    /**
+     * 换行符
+     */
     public final static String LINE_SEPARATOR = "\n";
 }

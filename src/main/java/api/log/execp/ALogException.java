@@ -1,8 +1,8 @@
 package api.log.execp;
 
 /**
- * @author: chenenwei
- * @date: 2025/7/31
+ * 异常类
+ * @author  chenenwei
  */
 public class ALogException extends RuntimeException{
 
