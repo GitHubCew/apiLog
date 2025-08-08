@@ -62,7 +62,7 @@ public class ALogAutoConfiguration implements ImportBeanDefinitionRegistrar, Web
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
                 registry.addResourceHandler("/alog/**")
-                        .addResourceLocations("classpath:/META-INF/resources/")
+                        .addResourceLocations("classpath:/META-INF/resources/alog/")
                         .resourceChain(true);
             }
         };
