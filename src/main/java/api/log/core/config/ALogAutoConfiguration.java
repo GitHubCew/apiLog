@@ -12,12 +12,22 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.*;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
+import org.springframework.web.servlet.resource.PathResourceResolver;
+import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+
+import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * 自动配置类
@@ -56,6 +66,7 @@ public class ALogAutoConfiguration implements ImportBeanDefinitionRegistrar, Web
         return advisor;
     }
 
+    @Order(0)
     @Bean
     public WebMvcConfigurer alogTerminalWebMvcConfigurer() {
         return new WebMvcConfigurer() {
@@ -122,5 +133,4 @@ public class ALogAutoConfiguration implements ImportBeanDefinitionRegistrar, Web
         ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry);
         scanner.scan(basePackages);
     }
-
 }
