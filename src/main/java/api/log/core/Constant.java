@@ -6,6 +6,8 @@ package api.log.core;
  */
 public class Constant {
 
+    public final static String ALOG_TERMINAL_HTML = "META-INF/resources/alog/alog-terminal.html";
+
     /**
      * 拼接符
      */
