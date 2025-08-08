@@ -18,6 +18,14 @@ api-log是一个基于SpringBoot + Websocket 开发的接口监测的web端命�
         </dependency>
 ```
 
+
+
+或者Maven中央仓库最新版本依赖：
+
+[Maven中央仓库地址(Sonatype Central)](https://central.sonatype.com/artifact/io.github.githubcew/api-log/)
+
+
+
    1. 如果项目中有安全校验，则需要放开路径：
        - `/alog-ws`
        - `/alog/alog-terminal.html`
@@ -84,5 +92,5 @@ success
 151
 
 
-``` 
+```
 
