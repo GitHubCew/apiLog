@@ -26,7 +26,7 @@ api-log是一个基于SpringBoot + Websocket 开发的接口监测的web端命�
    例如：Shiro中添加：
       
    ```java
-   filters.put("/alog-ws**", "anon");
+   filters.put("/alog-ws", "anon");
    filters.put("/alog/alog-terminal.html", "anon");
    ```
     
