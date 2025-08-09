@@ -15,8 +15,10 @@ api-log是一个基于SpringBoot + Websocket 开发的接口监测的web端命�
 # 使用步骤：
 
 1. git clone  
-2. 使用maven install 命令安装到本地maven仓库
-
+2. 使用maven clean install 命令安装到本地maven仓库
+```shell
+maven clean install
+```
 或者从Maven中央仓库拉取最新依赖：
 
 [Maven中央仓库地址(Sonatype Central)](https://central.sonatype.com/artifact/io.github.githubcew/api-log/)

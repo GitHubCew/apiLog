@@ -13,7 +13,7 @@ API-Log is a web-based command-line tool for interface monitoring, developed wit
 # Usage
 1.Clone the repository:
 ```shell
-git clone
+git clone https://github.com/GitHubCew/apiLog.git
 ```
 
 2.Install to local Maven repository:
