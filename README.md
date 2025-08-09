@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/alog-ws", "/alog/alog-terminal.html").permitAll()
+                .antMatchers("/alog-ws", "/alog/alog-terminal-zh.html").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
@@ -70,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 - Access the web interface at:
 
 ```shell
-[your-domain]/[context-path]/alog/alog-terminal.html
+[your-domain]/[context-path]/alog/alog-terminal-zh.html
 ```
 
 **Example**: localhost:8080/myapp/alog/alog-terminal.html
@@ -123,7 +123,7 @@ To monitor input parameters and execution time for /activityWalkRouteActivity/in
 1.Connect to the terminal and establish WebSocket connection:
 ```shell
 $ connect
-✅ WebSocket connected
+alog connected
 ```
 
 2.Start monitoring:

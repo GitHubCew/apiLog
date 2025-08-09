@@ -89,20 +89,20 @@
 
     function connectSocket() {
         if (socket && socket.readyState === WebSocket.OPEN) {
-            appendToTerminal('connection already open, do not repeat the connection.');
+            appendToTerminal('已连接,请勿重复连接.');
             return;
         }
 
         socket = new WebSocket(window.APP_CONFIG.socketUrl);
 
         socket.onopen = () => {
-            appendToTerminal('alog connected');
+            appendToTerminal('alog 连接成功');
             updatePrompt(true);
         };
         socket.onmessage = (e) => appendToTerminal(e.data);
-        socket.onerror = (e) => appendToTerminal(`connect error: ${e.type}`);
+        socket.onerror = (e) => appendToTerminal(`连接错误: ${e.type}`);
         socket.onclose = () => {
-            appendToTerminal('connect closed');
+            appendToTerminal('连接关闭');
             updatePrompt(false);
         };
     }
@@ -110,9 +110,9 @@
     function disconnectSocket() {
         if (socket && socket.readyState === WebSocket.OPEN) {
             socket.close();
-            appendToTerminal('connection closed');
+            appendToTerminal('连接关闭');
         } else {
-            appendToTerminal('connection not open or already closed。');
+            appendToTerminal('未连接或连接关闭');
         }
     }
 
@@ -146,20 +146,20 @@
     }
 
     function showHelp() {
-        appendToTerminal("ALog Terminal COMMANDS:");
+        appendToTerminal("ALog Terminal 命令帮助:");
         appendToTerminal("┌─────────────────────────────────────────────────────────────────────────────────────────────┐");
-        appendToTerminal("│  connect                                     connect WebSocket                              │");
-        appendToTerminal("│  exit/quit                                   close WebSocket                                │");
-        appendToTerminal("│  clear                                       clear terminal                                 │");
-        appendToTerminal("│  help                                        display command usage                          │");
-        appendToTerminal("│  ls [path]                                   list apis                                      │");
-        appendToTerminal("│  monitor [path] [param | result | time]      monitor api                                    │");
-        appendToTerminal("│                                              eg: monitor /api/v1/user param,time            │");
-        appendToTerminal("│  remove [path]                               remove api                                     │");
-        appendToTerminal("│                                              eg: remove /api/v1/user                        │");
-        appendToTerminal("│  clearall                                    clear all apis of monitor                      │");
+        appendToTerminal("│  connect                                     连接 WebSocket 服务器                     │");
+        appendToTerminal("│  exit/quit                                   断开 WebSocket 连接                       │");
+        appendToTerminal("│  clear                                       清空终端屏幕                               │");
+        appendToTerminal("│  help                                        显示本帮助信息                             │");
+        appendToTerminal("│  ls [path]                                   列出API接口,支持模糊搜索                    │");
+        appendToTerminal("│  monitor [path] [param | result | time]      监控指定API接口                            │");
+        appendToTerminal("│                                              示例: monitor /api/v1/user param,time     │");
+        appendToTerminal("│  remove [path]                               移除对指定API接口的监控                     │");
+        appendToTerminal("│                                              示例: remove /api/v1/user                 │");
+        appendToTerminal("│  clearall                                    清空全部监控的API接口                       │");
         appendToTerminal("└─────────────────────────────────────────────────────────────────────────────────────────────┘");
-        appendToTerminal("Tips: You can use ↑/↓ arrow keys to browse command history.");
+        appendToTerminal("提示：使用 ↑/↓ 箭头键浏览历史命令");
     }
 
     // 新增焦点事件处理
@@ -202,11 +202,11 @@
                     if (socket && socket.readyState === WebSocket.OPEN) {
                         socket.send(input);
                     } else {
-                        appendToTerminal('Do not connect to websocket, please input `connect` to connect.');
+                        appendToTerminal('未连接 webSocket，输入 `connect` 连接。');
                     }
             }
         } else if (e.ctrlKey && e.key === 'd') {
-            appendToTerminal('exit（Ctrl+D）');
+            appendToTerminal('断开连接（Ctrl+D）');
             disconnectSocket();
         } else if (e.key === 'ArrowUp') {
             e.preventDefault();
@@ -222,11 +222,11 @@
 
     // 初始提示
     appendToTerminal("┌──────────────────────────────┐");
-    appendToTerminal("│   Welcome to ALog Terminal   │");
-    appendToTerminal("│      Author: chenenwei       │");
+    appendToTerminal("│   欢迎使用 ALog Terminal    │");
+    appendToTerminal("│        作者: chenenwei      │");
     appendToTerminal("└──────────────────────────────┘\n");
 
-    appendToTerminal("Input 'help' to view command usage.");
+    appendToTerminal("输入 'help' 查看可用命令");
 </script>
 </body>
 </html>

@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 // 放开指定的接口
-                .antMatchers("alog-ws", "alog/alog-terminal.html").permitAll()
+                .antMatchers("alog-ws", "alog/alog-terminal-zh.html").permitAll()
                 // 其他接口需要认证
                 .anyRequest().authenticated()
             .and()
@@ -122,7 +122,7 @@ public Result<ActivityWalkRouteActivityInfoVO> info(@RequestParam("id") Long id)
 
 # 输入connect命令连接 WebSocket 服务器
 $ connect
-✅ WebSocket 已连接
+alog connected
 
 # 使用monitor命令监测 /activityWalkRouteActivity/info 的入参和耗时
 alog> monitor /activityWalkRouteActivity/info param,time
