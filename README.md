@@ -1,94 +1,146 @@
-# api-log 介绍
-
-api-log是一个基于SpringBoot + Websocket 开发的接口监测的web端命令行工具
-支持对一个或多个接口的的入参、返回值、耗时进行检测，可以解决和一些复杂场景下接口
-参数、耗时无法检测的问题。
-
-# 使用步骤：
-
-1. 使用git clone 项目
-2. 使用maven install 命令安装到本地maven仓库
-
-或者从Maven中央仓库拉取最新依赖：
-
-[Maven中央仓库地址(Sonatype Central)](https://central.sonatype.com/artifact/io.github.githubcew/api-log/)
+# API-Log Documentation
+API-Log is a web-based command-line tool for interface monitoring, developed with SpringBoot and WebSocket. It enables real-time monitoring of one or multiple API interfaces, tracking input parameters, return values, and execution time, addressing challenges in complex scenarios where traditional monitoring falls short.
 
 
-3. 在项目中引用依赖:
+# Key Features
+- Real-time monitoring via WebSocket connections
+- Support for monitoring multiple interfaces with fuzzy search capability
+- Tracks input parameters, return values, and execution time
+- Allows removal of monitored interfaces
+- High performance with minimal impact on original business operations
+- Compatible with various clients including web terminals and WebSocket tools
 
+# Usage
+1.Clone the repository:
+```shell
+git clone
+```
+
+2.Install to local Maven repository:
+```shell
+mvn clean install
+```
+
+Alternatively, pull the latest dependency from Maven Central:
+[Maven Central Repository (Sonatype)](https://central.sonatype.com/artifact/io.github.githubcew/api-log/)
+
+3.Add dependency to your project:
 ```xml
-      <dependency>
-            <groupId>io.github.githubcew</groupId>
-            <artifactId>api-log</artifactId>
-            <version>${version}</version>
-        </dependency>
+<dependency>
+    <groupId>io.github.githubcew</groupId>
+    <artifactId>api-log</artifactId>
+    <version>${version}</version> <!-- Replace with actual version -->
+</dependency>
 ```
 
-4. 如果项目中有安全校验，则需要放开路径：
-    - `/alog-ws`
-    - `/alog/alog-terminal.html`
-      
-      
-   例如：Shiro中添加：
-      
-   ```java
-   filters.put("/alog-ws", "anon");
-   filters.put("/alog/alog-terminal.html", "anon");
-   ```
-    
+4.Security Configuration
+  
+If your project has security validation, whitelist these paths:
 
+- /alog-ws
+- /alog/alog-terminal.html
 
-5. 启动项目
+Example for Shiro:
+```java
+filters.put("/alog-ws", "anon");
+filters.put("/alog/alog-terminal.html", "anon");
+```
+Example for Spring Security:
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
-6. 访问项目web + `/alog/alog-terminal.html`  
-   例如： `localhost:80/context/alog/alog-terminal.html` (context: 为项目的context-path上下文)
-
-
-7. 进入alog,如果出现如下界面，则成功
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("/alog-ws", "/alog/alog-terminal.html").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .csrf().disable();
 
 ```
- ┌──────────────────────────────┐
- │   欢迎使用 ALog Terminal    │
- │        作者: chenenwei      │
+
+5.Getting Started
+   
+- Start your application
+- Access the web interface at:
+
+```shell
+[your-domain]/[context-path]/alog/alog-terminal.html
+```
+
+**Example**: localhost:8080/myapp/alog/alog-terminal.html
+
+**Upon successful connection, you'll see**:
+
+```shell
+┌──────────────────────────────┐
+ │   Welcome to ALog Terminal   │
+ │      Author: chenenwei       │
  └──────────────────────────────┘
 
-    输入 'help' 查看可用命令
+     Type 'help' for command list
  
  $
+```
+
+# Command Reference
+**connect** - Establish WebSocket connection
+
+**exit/qui**t： Terminate WebSocket connection
+
+**clear**： Clear terminal screen
+
+**help**： Display help information
+
+**ls** [path]： List API interfaces (supports fuzzy search)
+
+**monitor** [path] [param | result | time]： Monitor specific API (options: param, result, time)
+
+**remove** [path]：Remove monitoring for specified API
+
+**clearall**： Clear all monitored APIs
+
+**Tip**: Use ↑/↓ arrow keys to navigate command history
+
+# Example Usage
+
+Consider this sample API:
+```java
+@GetMapping("/activityWalkRouteActivity/info")
+public Result<ActivityWalkRouteActivityInfoVO> info(@RequestParam("id") Long id) {
+    // Implementation
+}
 
 ```
 
-8.命令介绍
-- connect 连接 WebSocket 服务器
-- exit/quit 断开 WebSocket 连接
-- clear 清空终端屏幕
-- help 显示本帮助信息
-- ls [path] 查看API接口,支持模糊搜索
-- monitor [path] [param | result | time]监控指定API接口,监控内容可选：param:参数 result:结果 time:耗时
-- remove [path] 移除对指定API接口的监控
-- clearall 清空全部监控的API接口
+To monitor input parameters and execution time for /activityWalkRouteActivity/info:
 
-提示：使用 ↑/↓ 箭头键浏览历史命令
-
-# 例子
-
-```shell 
-
-# 连接 WebSocket 服务器
+1.Connect to the terminal and establish WebSocket connection:
+```shell
 $ connect
-✅ WebSocket 已连接
+✅ WebSocket connected
+```
 
-# 监测 /activityWalkRouteActivity/info 的入参和耗时
+2.Start monitoring:
+```shell
 alog> monitor /activityWalkRouteActivity/info param,time
 success
-
-# 这里需要自己触发调用接口/activityWalkRouteActivity/info
-
-# 监测返回的结果和耗时
-"id":495 
-151
-
-
+```
+3.Trigger the API (e.g., via curl):
+```shell
+curl http://localhost:8080/activityWalkRouteActivity/info?id=495
 ```
 
+4.View monitoring output:
+```text
+>monitor /activityWalkRouteActivity/info param,time
+success
+
+"id":495   # Method parameter
+151        # Execution time (ms)
+```
