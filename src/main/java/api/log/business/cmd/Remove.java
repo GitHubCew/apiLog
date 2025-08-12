@@ -1,6 +1,7 @@
 package api.log.business.cmd;
 
 import api.log.core.Cache;
+import api.log.core.Constant;
 
 /**
  * 移除命令
@@ -24,13 +25,13 @@ public class Remove extends CommonCmd{
     @Override
     public String check(String[] args) {
         if (args.length != 1) {
-            return "单次只能移除一个接口";
+            return error("单次只能移除一个接口");
         }
         boolean has = Cache.hasUri(args[0]);
         if (!has) {
-            return "接口不存在";
+            return error("接口不存在");
         }
-        return "";
+        return Constant.EMPTY;
     }
 
     /**
@@ -43,6 +44,6 @@ public class Remove extends CommonCmd{
     @Override
     public Object execute(String user, String cmd, String[] args) {
         Cache.removeMethod(user, Cache.getMethod(args[0]));
-        return "success";
+        return Constant.OK;
     }
 }

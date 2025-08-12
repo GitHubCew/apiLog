@@ -1,8 +1,6 @@
 # api-log 介绍
 
-api-log是一个基于SpringBoot + Websocket 开发的接口监测的web端命令行工具
-支持对一个或多个接口的的入参、返回值、耗时进行检测，可以解决和一些复杂场景下接口
-参数、耗时无法检测的问题。
+api-log是一个基于SpringBoot + Websocket 开发的接口监测web端命令行工具, 主要用于开发或线上接口定位、性能优化分析，支持针对一个或多个接口的的入参、返回值、耗时、异常、调用链进行监测， 可以解决一些复杂场景下接口监测的问题。
 
 # 特性
 - 采用WebSocket连接，实时监控接口请求
@@ -57,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 // 放开指定的接口
-                .antMatchers("alog-ws", "alog/alog-terminal-zh.html").permitAll()
+                .antMatchers("alog-ws", "alog/alog-terminal.html").permitAll()
                 // 其他接口需要认证
                 .anyRequest().authenticated()
             .and()

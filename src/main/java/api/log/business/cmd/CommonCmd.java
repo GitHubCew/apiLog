@@ -1,5 +1,7 @@
 package api.log.business.cmd;
 
+import api.log.core.Constant;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -57,7 +59,7 @@ public class CommonCmd implements Cmd{
      */
     public CommonCmd (String args) {
 
-        String[] parts = args.split("\\s+");
+        String[] parts = args.trim().split(Constant.SPACE_PATTERN);
 
         // 命令
         String command = parts.length > 0 ? parts[0] : "";
@@ -105,9 +107,18 @@ public class CommonCmd implements Cmd{
                 return check;
             }
             Object result = execute(user, this.cmd, this.args);
-            return result.equals("") ? "success" : result;
+            return result.equals(Constant.OK) ? Constant.OK : result;
         } catch (Exception e) {
-            return e.getMessage();
+            return error(e.getMessage());
         }
+    }
+
+    /**
+     * 错误信息
+     * @param msg 消息
+     * @return
+     */
+    protected String error (String msg) {
+        return Constant.OUT_ERROR + msg;
     }
 }

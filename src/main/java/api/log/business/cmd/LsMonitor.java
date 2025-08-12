@@ -1,22 +1,19 @@
 package api.log.business.cmd;
 
-import api.log.core.Constant;
 import api.log.core.Cache;
+import api.log.core.Constant;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 列出接口命令
- * @author  chenenwei
+ * @author chenenwei
  */
-public class Ls extends CommonCmd{
-
+public class LsMonitor extends CommonCmd{
     /**
      * 构造函数
      * @param args 参数
      */
-    public Ls(String args) {
+    public LsMonitor(String args) {
         super(args);
     }
 
@@ -28,8 +25,8 @@ public class Ls extends CommonCmd{
     @Override
     public String check(String[] args) {
 
-        if (args.length != 0 && args.length != 1) {
-            return error("参数错误: 格式为：ls [接口路径]");
+        if (args.length != 0) {
+            return error("参数错误: 格式为：lsm ");
         }
         return Constant.EMPTY;
     }
@@ -43,11 +40,6 @@ public class Ls extends CommonCmd{
      */
     @Override
     public String execute(String user, String cmd, String[] args) {
-        List<String> sorted = Cache.methodCache.keySet().stream().sorted().collect(Collectors.toList());
-        if (args.length == 0) {
-            return String.join(Constant.LINE_SEPARATOR, sorted);
-        }
-        return sorted.stream().filter(key -> key.contains(args[0])).collect(Collectors.joining(Constant.LINE_SEPARATOR));
+        return Cache.getUrisByUser(user).stream().sorted().collect(Collectors.joining(Constant.LINE_SEPARATOR));
     }
 }
-

@@ -24,6 +24,10 @@ public class MonitorInfo {
      * 时间
      */
     private boolean time;
+    /**
+     * 异常
+     */
+    private boolean exception;
 
     /**
      * 构造方法
@@ -38,16 +42,17 @@ public class MonitorInfo {
      * @param result 结果
      * @param time 时间
      */
-    public MonitorInfo (Method method, boolean param, boolean result, boolean time) {
+    public MonitorInfo (Method method, boolean param, boolean result, boolean time, boolean exception) {
         this.method = method;
         this.param = param;
         this.result = result;
         this.time = time;
+        this.exception = exception;
     }
 
     /**
      * 获取方法
-     * @return
+     * @return 方法
      */
     public Method getMethod() {
         return method;
@@ -63,7 +68,7 @@ public class MonitorInfo {
 
     /**
      * 获取参数
-     * @return 参数
+     * @return 是否打印参数
      */
     public boolean isParam() {
         return param;
@@ -79,7 +84,7 @@ public class MonitorInfo {
 
     /**
      * 获取结果
-     * @return 结果
+     * @return 是否打印结果
      */
     public boolean isResult() {
         return result;
@@ -95,7 +100,7 @@ public class MonitorInfo {
 
     /**
      * 获取时间
-     * @return 时间
+     * @return 是否打印时间
      */
     public boolean isTime() {
         return time;
@@ -107,5 +112,21 @@ public class MonitorInfo {
      */
     public void setTime(boolean time) {
         this.time = time;
+    }
+
+    /**
+     * 获取异常
+     * @return 是否打印异常
+     */
+    public boolean isException() {
+        return exception;
+    }
+
+    /**
+     * 设置异常
+     * @param exception 异常
+     */
+    public void setException(boolean exception) {
+        this.exception = exception;
     }
 }

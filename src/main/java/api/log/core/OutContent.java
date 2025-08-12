@@ -22,6 +22,11 @@ public class OutContent {
     private Object result;
 
     /**
+     * 异常
+     */
+    private Exception exception;
+
+    /**
      * 获取参数
      * @return 参数
      */
@@ -67,5 +72,21 @@ public class OutContent {
      */
     public void setResult(Object result) {
         this.result = result;
+    }
+
+    /**
+     * 获取异常
+     * @return 异常
+     */
+    public Exception getException() {
+        return exception;
+    }
+
+    /**
+     * 设置异常
+     * @param exception 异常
+     */
+    public void setException(Exception exception) {
+        this.exception = exception;
     }
 }

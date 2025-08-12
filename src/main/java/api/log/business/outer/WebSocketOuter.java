@@ -1,5 +1,6 @@
 package api.log.business.outer;
 
+import api.log.business.cmd.CommonCmd;
 import api.log.core.Constant;
 import api.log.core.ContextUtil;
 import api.log.core.MonitorInfo;
@@ -11,6 +12,8 @@ import api.log.business.socket.SocketHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Map;
@@ -38,28 +41,51 @@ public class WebSocketOuter implements Outer{
     public void out(Method method, OutContent outContent) {
 
         Map<String, MonitorInfo> monitorOfUser = Cache.getUsersByMethod(method);
+        SocketHandler socketHandler = ContextUtil.getBean(SocketHandler.class);
         monitorOfUser.forEach((userId, monitorInfo) -> {
             try {
                 SessionContext session = ContextUtil.getBean(SessionManager.class).getSession(userId);
                 if (!session.getSession().isOpen()) {
                     return;
                 }
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new StringBuilder(Constant.CONCAT_SEPARATOR);
+                StringBuilder err = new StringBuilder();
+                boolean sendNormal = false;
+                boolean sendException = false;
                 if (monitorInfo.isParam()) {
+                    sendNormal = true;
+                    sb.append("[PARAM] ");
                     appendValue(sb, objectMapper, outContent.getParam());
                     sb.append(Constant.CONCAT_SEPARATOR);
-
                 }
                 if (monitorInfo.isResult()) {
+                    sendNormal = true;
+                    sb.append("[RESULT] ");
                     appendValue(sb, objectMapper, outContent.getResult());
                     sb.append(Constant.CONCAT_SEPARATOR);
-
                 }
                 if (monitorInfo.isTime()) {
+                    sendNormal = true;
+                    sb.append("[TIME] ");
                     appendValue(sb, objectMapper, outContent.getTime());
+                    sb.append(Constant.CONCAT_SEPARATOR);
+                 }
+                if (monitorInfo.isException()) {
+                    if (outContent.getException() != null) {
+                        sendException = true;
+                        err.append("[ERROR] ");
+                        appendException(err, outContent.getException());
+                    }
                 }
-                // 发送消息
-                ContextUtil.getBean(SocketHandler.class).sendToClient(session.getSession(), sb.toString().replaceAll(Constant.CONCAT_SEPARATOR, Constant.LINE_SEPARATOR));
+
+                // 发送正常消息
+                if (sendNormal) {
+                    socketHandler.sendToClient(session.getSession(), sb.toString().replaceAll(Constant.CONCAT_SEPARATOR, Constant.LINE_SEPARATOR));
+                }
+                // 发送异常消息
+                if (sendException) {
+                    socketHandler.sendToClient(session.getSession(), err.toString().replaceAll(Constant.CONCAT_SEPARATOR, Constant.LINE_SEPARATOR));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -96,4 +122,18 @@ public class WebSocketOuter implements Outer{
             sb.append(mapper.writeValueAsString(value));
         }
     }
+
+    /**
+     * 追加异常信息
+     * @param sb
+     * @param e
+     */
+    public void appendException (StringBuilder sb, Exception e) {
+        // 处理异常信息
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);  // 将堆栈信息输出到 PrintWriter
+            sb.append(sw);  // 转换为字符串并追加
+        }
+
 }

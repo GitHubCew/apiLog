@@ -1,10 +1,7 @@
 package api.log.business.socket;
 
+import api.log.business.cmd.*;
 import api.log.core.Constant;
-import api.log.business.cmd.ClearAll;
-import api.log.business.cmd.Ls;
-import api.log.business.cmd.Monitor;
-import api.log.business.cmd.Remove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -82,28 +79,36 @@ public class SocketHandler extends TextWebSocketHandler {
         WebSocketSession session = context.getSession();
         String userId = context.getUserId();
         if (Objects.isNull(cmd) || cmd.isEmpty()) {
-            sendToClient(session, "请输入命令");
+            sendToClient(session, Constant.OUT_ERROR + "请输入命令");
         }
         else {
-            String trimCmd = cmd.trim();
+            String[] parts = cmd.split(Constant.SPACE_PATTERN);
+            String trimCmd = parts[0];
             Object result = "";
-            if (trimCmd.startsWith("ls")) {
-                Ls ls = new Ls(trimCmd);
-                result = ls.exec(userId);
-                sendToClient(session, result.toString().replace(Constant.CONCAT_SEPARATOR, Constant.LINE_SEPARATOR));
+            if (trimCmd.equals("lsm")) {
+                LsMonitor lsm = new LsMonitor(cmd);
+                result = lsm.exec(userId);
+                sendToClient(session, format(result.toString()));
             }
-            else if (trimCmd.startsWith("monitor")) {
-                result = new Monitor(trimCmd).exec(userId);
+            else if (trimCmd.equals("ls")) {
+                Ls ls = new Ls(cmd);
+                result = ls.exec(userId);
+                sendToClient(session, format(result.toString()));
+            }
+            else if (trimCmd.equals("monitor")) {
+                result = new Monitor(cmd).exec(userId);
                 sendToClient(session, result.toString());
-            } else if (trimCmd.startsWith("remove")) {
-                result = new Remove(trimCmd).exec(userId);
+            }
+            else if (trimCmd.equals("remove")) {
+                result = new Remove(cmd).exec(userId);
                 sendToClient(session, result.toString());
-            } else if (trimCmd.startsWith("clearall")) {
-                result = new ClearAll(trimCmd).exec(userId);
+            }
+            else if (trimCmd.equals("clearall")) {
+                result = new ClearAll(cmd).exec(userId);
                 sendToClient(session, result.toString());
             }
             else {
-                result = "命令不支持";
+                result = Constant.OUT_ERROR + "命令不支持";
                 sendToClient(session, result.toString());
             }
         }
@@ -122,5 +127,14 @@ public class SocketHandler extends TextWebSocketHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 格式化
+     * @param out  输出
+     * @return 格式化后的输出
+     */
+    private String format (String out) {
+        return out.replace(Constant.CONCAT_SEPARATOR, Constant.LINE_SEPARATOR);
     }
 }

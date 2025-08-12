@@ -5,6 +5,7 @@ import api.log.core.MonitorInfo;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * 缓存
@@ -63,7 +64,7 @@ public class Cache {
         // 处理userMethods
         if(!userMethods.containsKey(user)) {
             List<MonitorInfo> methods = new ArrayList<>();
-            MonitorInfo monitorInfo = new MonitorInfo(method, true, false, false);
+            MonitorInfo monitorInfo = new MonitorInfo(method, true, false, false, false);
             monitorInfo.setMethod(method);
             methods.add(monitorInfo);
             userMethods.put(user, methods);
@@ -232,5 +233,19 @@ public class Cache {
             });
         });
         return result;
+    }
+
+    public static List<String> getUrisByUser (String user) {
+        List<String> uris = new ArrayList<>();
+        if(!userMethods.containsKey(user)) {
+            return Collections.emptyList();
+        }
+        List<Method> methods = userMethods.get(user).stream().map(MonitorInfo::getMethod).collect(Collectors.toList());
+        methodCache.forEach((uri, method) -> {
+            if(methods.contains(method)) {
+                uris.add(uri);
+            }
+        });
+        return uris;
     }
 }

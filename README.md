@@ -1,6 +1,5 @@
 # API-Log Documentation
-API-Log is a web-based command-line tool for interface monitoring, developed with SpringBoot and WebSocket. It enables real-time monitoring of one or multiple API interfaces, tracking input parameters, return values, and execution time, addressing challenges in complex scenarios where traditional monitoring falls short.
-
+API-Log is a web-based command-line monitoring tool developed with SpringBoot and WebSocket, primarily designed for troubleshooting and performance optimization analysis during development or production. It supports monitoring of request parameters, return values, execution time, exceptions, and call chains for one or multiple APIs, helping to resolve interface monitoring challenges in complex scenarios.
 
 # Key Features
 - Real-time monitoring via WebSocket connections
@@ -55,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/alog-ws", "/alog/alog-terminal-zh.html").permitAll()
+                .antMatchers("/alog-ws", "/alog/alog-terminal.html").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
@@ -70,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 - Access the web interface at:
 
 ```shell
-[your-domain]/[context-path]/alog/alog-terminal-zh.html
+[your-domain]/[context-path]/alog/alog-terminal.html
 ```
 
 **Example**: localhost:8080/myapp/alog/alog-terminal.html

@@ -1,6 +1,7 @@
 package api.log.business.cmd;
 
 import api.log.core.Cache;
+import api.log.core.Constant;
 
 /**
  * 清除所有方法命令
@@ -24,9 +25,9 @@ public class ClearAll extends CommonCmd{
     @Override
     public String check(String[] args) {
         if (args.length != 0) {
-            return "参数错误";
+            return error("参数错误");
         }
-        return "";
+        return Constant.EMPTY;
     }
 
     /**
@@ -39,6 +40,6 @@ public class ClearAll extends CommonCmd{
     @Override
     public Object execute(String user, String cmd, String[] args) {
         Cache.clearUser(user);
-        return "success";
+        return Constant.OK;
     }
 }

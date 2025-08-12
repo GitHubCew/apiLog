@@ -50,7 +50,8 @@ public class MethodAdvice implements MethodInterceptor {
 
         }
         catch (Exception e) {
-            throw new RuntimeException(e);
+            content.setException(e);
+            throw e;
         }
         finally {
             // 输出content
